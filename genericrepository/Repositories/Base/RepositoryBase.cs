@@ -8,7 +8,7 @@ namespace GenericRepository.Repositories.Base
 
     public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class
     {
-        private Context _context = new Context();
+        private readonly Context _context;
 
 
         public RepositoryBase(Context context)

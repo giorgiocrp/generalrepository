@@ -1,30 +1,46 @@
-using AutoMapper;
+using System;
+using System.Collections.Generic;
+using Xunit;
+using Moq;
+using Microsoft.EntityFrameworkCore;
 using GenericRepository.Data;
 using GenericRepository.Models;
 using GenericRepository.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Moq;
-using TestGenericRepository.Mocks;
 
 namespace TestGenericRepository
 {
     public class ProductRepositoryTest
     {
-
+        
         [Fact]
-        public void TestCountMethod()
+         public void Count_ReturnsCorrectCount()
         {
-            var mock = MockProductRepository.GetMock();
+            // Arrange
+            var dbContextOptions = new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
 
-            var context=new Context();
+            using (var context = new Context(dbContextOptions))
+            {
+                var productRepository = new ProductRepository(context);
 
-            var repository = new ProductRepository(mock.Object,context);
+                // Add some test data
+                var products = new List<Product>
+                {
+                    new Product { ProductId = 1, Name = "Product1" },
+                    new Product { ProductId = 2, Name = "Product2" },
+                    new Product { ProductId = 3, Name = "Product3" },
+                };
 
-            //Assert
+                context.Products.AddRange(products);
+                context.SaveChanges();
 
-            var result = repository.Count();
-            Assert.Equal(10, result);
+                // Act
+                var result = productRepository.Count();
 
+                // Assert
+                Assert.Equal(3, result); // Change the expected count based on your test data
+            }
         }
     }
 }

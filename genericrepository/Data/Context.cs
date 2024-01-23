@@ -7,9 +7,11 @@ namespace GenericRepository.Data
     public class Context : DbContext
     {
         public DbSet<Product> Products{get;set;}
+
         public Context()
         {
         }
+
         public Context(DbContextOptions<Context> options) : base(options)
         {
         }
