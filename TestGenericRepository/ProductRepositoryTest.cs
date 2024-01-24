@@ -42,5 +42,36 @@ namespace TestGenericRepository
                 Assert.Equal(3, result); // Change the expected count based on your test data
             }
         }
+
+        [Fact]
+         public async void Count_ReturnsCorrectCountAsync()
+        {
+            // Arrange
+            var dbContextOptions = new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new Context(dbContextOptions))
+            {
+                var productRepository = new ProductRepository(context);
+
+                // Add some test data
+                var products = new List<Product>
+                {
+                    new Product { ProductId = 1, Name = "Product1" },
+                    new Product { ProductId = 2, Name = "Product2" },
+                    new Product { ProductId = 3, Name = "Product3" },
+                };
+
+                context.Products.AddRange(products);
+                context.SaveChanges();
+
+                // Act
+                var result = await productRepository.CountAsync();
+
+                // Assert
+                Assert.Equal(3, result); // Change the expected count based on your test data
+            }
+        }
     }
 }
