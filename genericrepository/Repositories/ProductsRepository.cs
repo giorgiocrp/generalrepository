@@ -4,7 +4,7 @@ using GenericRepository.Models;
 using GenericRepository.Repositories.Base;
 
 namespace GenericRepository.Repositories{
-    public class ProductRepository:RepositoryBase<Product> {
+    public class ProductRepository:RepositoryBase<Product>,IProductRepository {
            
         public ProductRepository(Context context):base(context)
         {
